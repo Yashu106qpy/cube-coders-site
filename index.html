@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cube Coders — Minecraft Server Developers</title>
+  <meta name="description" content="Cube Coders - Professional Minecraft server setups, plugins & premium deals."/>
+  <style>
+    :root{
+      --accent:#0b84ff;
+      --dark:#0b1220;
+      --muted:#6b7280;
+      --card-bg:#0f1724;
+      --glass: rgba(255,255,255,0.03);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;background:linear-gradient(180deg,#071023 0%, #061827 100%);color:#e6eef8;line-height:1.5}
+    .wrap{max-width:1000px;margin:28px auto;padding:20px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:56px;height:56px;border-radius:12px;background:var(--glass);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent)}
+    nav a{color:#cde5ff;text-decoration:none;margin-left:12px;font-size:14px}
+    .hero{display:grid;grid-template-columns:1fr;gap:18px;margin-top:28px;padding:22px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))}
+    .hero h1{margin:0;font-size:28px}
+    .hero p{color:var(--muted);margin:8px 0 0}
+    .btn{display:inline-block;padding:10px 16px;border-radius:10px;background:var(--accent);color:white;text-decoration:none;font-weight:600;margin-top:12px}
+    .card{background:var(--card-bg);padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.6);margin-top:16px}
+    .card h3{margin:0 0 8px}
+    .muted{color:var(--muted);font-size:14px}
+    footer{margin-top:28px;text-align:center;color:var(--muted);font-size:13px;padding:16px}
+    .offers h2{color:#0b84ff;margin:8px 0}
+    .offers ul{margin:0;padding-left:20px}
+    .offers li{margin:6px 0}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">CC</div>
+        <div>
+          <div style="font-weight:700">Cube Coders</div>
+          <div class="muted" style="font-size:13px">Minecraft Server Development & Premium Plugins</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#services">Services</a>
+        <a href="#offers">Offers</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <h1>Cube Coders — Professional Minecraft Server Setups & Premium Plugins</h1>
+      <p>We provide server setups, optimization, premium plugins and full support at the lowest prices. Take your server to the next level!</p>
+      <a class="btn" href="#contact">Contact Us</a>
+    </section>
+
+    <!-- Exclusive Offers Section -->
+    <section id="offers" class="offers">
+      <div class="card">
+        <h2>📢 Exclusive Plugin & Setup Offers</h2>
+        <ul>
+          <li>🔹 <b>Normal Setup</b> — 💵 100₹ / OWO 50K</li>
+          <li>🔹 <b>Item Editor Setup</b> — 💵 2$ / OWO 150K <br> (Modal Version: 2.5$ / OWO 175K)</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>💠 Premium Plugin Deals</h2>
+        <ul>
+          <li>✔️ <b>Any Single Paid Plugin</b> — 450₹ / OWO 300K</li>
+          <li>✔️ <b>All Paid Plugins (Bundle Offer)</b> — 1000₹ / OWO 800K</li>
+        </ul>
+        <h3>📦 Bundle Includes:</h3>
+        <ul>
+          <li>🛡️ CoreProtect – Rollback / Anti-Grief</li>
+          <li>🛒 ShopGUI+ – GUI Shops</li>
+          <li>✨ AdvancedEnchantments – Custom Enchants</li>
+          <li>🗺️ Residence – Land Claiming</li>
+          <li>🧱 GriefDefender – Protection / Claims</li>
+          <li>💳 Tebex (Buycraft) – Server Store</li>
+          <li>🎁 AquaticCrates – Fancy Crates</li>
+          <li>🔐 Residence Addons – Extra Features</li>
+          <li>📦 CrateReloaded Pro – Crates System</li>
+          <li>🧩 Custom GUI Plugins – Menus / Shops</li>
+          <li>...and many more premium plugins!</li>
+        </ul>
+        <!-- Yahan photo add ho rahi hai -->
+        <img src="packmmc.jpg" alt="Premium Plugins Banner" style="width:100%;border-radius:10px;margin-top:14px;">
+      </div>
+
+      <div class="card" style="text-align:center">
+        ⚡ <b>Get Professional Setups & Premium Plugins at the Lowest Prices!</b>
+        <br><br>
+        👨‍💻 <b>Developers:</b><br>
+        <span style="color:#0b84ff">Yashu Playzz</span> | 
+        <span style="color:#0b84ff">Ankit</span> 📛
+      </div>
+    </section>
+
+    <section id="contact" style="margin-top:20px">
+      <div class="card">
+        <h2>📩 Contact Us</h2>
+        <p>Discord DM: <b>yashuplayzz,ankit__0385</b>  <br> or email us:</p>
+        <p><a class="btn" href="mailto:your.email@example.com">Send Email</a></p>
+      </div>
+    </section>
+
+    <footer>
+      © <span id="year"></span> Cube Coders — All Rights Reserved
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

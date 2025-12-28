@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cube Coders — Shop</title>
+<style>
+:root{
+  --accent:#0b84ff;
+  --dark:#0b1220;
+  --muted:#6b7280;
+  --card-bg:#0f1724;
+  --bg-grad: linear-gradient(180deg,#071023 0%, #061827 100%);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter, system-ui, -apple-system,"Segoe UI",Roboto,Arial;background:var(--bg-grad);color:#e6eef8;line-height:1.45}
+.wrap{max-width:1100px;margin:28px auto;padding:20px}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:56px;height:56px;border-radius:12px;background:rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.logo img{width:100%;height:100%;object-fit:cover;border-radius:12px}
+nav a{color:#cde5ff;text-decoration:none;margin-left:12px;font-size:14px}
+.hero{display:grid;grid-template-columns:1fr;gap:12px;margin-top:18px;padding:18px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))}
+.hero h1{margin:0;font-size:24px}
+.hero p{color:var(--muted);margin:6px 0 0}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:20px}
+.card{background:var(--card-bg);padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
+.card h3{margin:6px 0}
+.price{font-weight:700;color:#fff;margin-top:8px}
+.muted{color:var(--muted);font-size:13px}
+.btn{display:inline-block;padding:8px 12px;border-radius:10px;background:var(--accent);color:white;text-decoration:none;font-weight:600;border:none;cursor:pointer}
+.cart-toggle{position:fixed;right:18px;top:18px;background:#081224;border:1px solid rgba(255,255,255,0.03);padding:8px 12px;border-radius:10px;cursor:pointer;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
+.cart-drawer{position:fixed;right:0;top:0;height:100%;width:360px;background:linear-gradient(180deg,#071022,#061827);box-shadow:-8px 0 30px rgba(2,6,23,0.7);transform:translateX(100%);transition:transform .28s;z-index:60;padding:20px;overflow:auto}
+.cart-drawer.open{transform:translateX(0)}
+.cart-item{display:flex;gap:12px;align-items:center;border-bottom:1px solid rgba(255,255,255,0.02);padding:12px 0}
+.cart-item img{width:56px;height:40px;object-fit:cover;border-radius:8px}
+.cart-summary{margin-top:12px}
+.small{font-size:13px;color:var(--muted)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.outline{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 10px;border-radius:8px;color:#cfe9ff;cursor:pointer}
+@media (max-width:720px){.cart-drawer{width:100%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="brand">
+    <div class="logo"><img src="CubeCoders.jpg" alt="logo"></div>
+    <div>
+      <div style="font-weight:700">Cube Coders</div>
+      <div class="muted" style="font-size:13px">Minecraft Server Setups & Premium Plugins</div>
+    </div>
+  </div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="#offers">Offers</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>Shop — Server Plans & Offers</h1>
+  <p>Choose a plan and add to cart. Click "Order Now" to go to checkout.</p>
+</section>
+
+<section class="cards" id="product-list"></section>
+</div>
+
+<div class="cart-toggle btn" id="open-cart">Cart (<span id="cart-count">0</span>)</div>
+
+<aside class="cart-drawer" id="cart-drawer" aria-hidden="true">
+  <h2 style="color:var(--accent);margin:0 0 10px 0">Your Cart</h2>
+  <div id="cart-items"></div>
+  <div class="cart-summary small" id="cart-summary" style="display:none">
+    <div style="margin-top:12px">
+      <div class="small">Subtotal: <span id="cart-subtotal">₹0</span></div>
+      <div class="small">Service Fee: <span id="cart-fee">₹50</span></div>
+      <div style="font-weight:700;margin-top:6px">Total: <span id="cart-total">₹0</span></div>
+    </div>
+    <div class="actions">
+      <button class="btn" id="checkout-btn">Order Now</button>
+      <button class="outline" id="clear-cart">Clear Cart</button>
+    </div>
+  </div>
+  <div id="cart-empty" class="small" style="margin-top:12px">Your cart is empty.</div>
+  <div style="margin-top:18px" class="small">Note: This is a demo checkout. Checkout page will show order details.</div>
+  <div style="margin-top:10px"><button class="outline" id="close-cart">Close</button></div>
+</aside>
+
+<script>
+const PRODUCTS = [
+  {id:'basic-1', title:'Normal Setup', price:100, desc:'Basic server setup (optimizations + starter plugins).', img:null},
+  {id:'itemeditor-1', title:'Item Editor Setup', price:200, desc:'Item editor config & modal version available.', img:null},
+  {id:'bundle-1', title:'All Paid Plugins Bundle', price:1000, desc:'Bundle of premium plugins.', img:'packmmc.jpg', bundleList:[
+    '🛡️ CoreProtect – Rollback / Anti-Grief',
+    '🛒 ShopGUI+ – GUI Shops',
+    '✨ AdvancedEnchantments – Custom Enchants',
+    '🗺️ Residence – Land Claiming',
+    '🧱 GriefDefender – Protection / Claims',
+    '💳 Tebex (Buycraft) – Server Store',
+    '🎁 AquaticCrates – Fancy Crates',
+    '🔐 Residence Addons – Extra Features',
+    '📦 CrateReloaded Pro – Crates System',
+    '🧩 Custom GUI Plugins – Menus / Shops',
+    '...and many more premium plugins!'
+  ]},
+  {id:'megadeath', title:'MineDeath Lifesteal Setup', price:200, desc:'Optimized Lifesteal setup — PvP ready, economy & GUI.', img:null}
+];
+
+function loadCart(){ try{ return JSON.parse(localStorage.getItem('cc_cart')||'[]') }catch(e){return []} }
+function saveCart(cart){ localStorage.setItem('cc_cart', JSON.stringify(cart)); updateCartUI(); }
+function addToCart(productId){
+  const cart = loadCart();
+  const item = cart.find(i=>i.id===productId);
+  if(item) item.qty++; 
+  else { const p=PRODUCTS.find(x=>x.id===productId); cart.push({id:p.id,title:p.title,price:p.price,qty:1}); }
+  saveCart(cart);
+}
+function removeFromCart(productId){ let cart=loadCart(); cart=cart.filter(i=>i.id!==productId); saveCart(cart); }
+function updateQty(productId, qty){ const cart=loadCart(); const item=cart.find(i=>i.id===productId); if(!item) return; item.qty=qty>0?qty:1; saveCart(cart); }
+function clearCart(){ localStorage.removeItem('cc_cart'); updateCartUI(); }
+
+const productList = document.getElementById('product-list');
+PRODUCTS.forEach(p=>{
+  const el=document.createElement('div'); el.className='card';
+  let imgHTML = p.img?`<img src="${p.img}" alt="${p.title}" style="width:100%;border-radius:8px;height:140px;object-fit:cover">`:'';
+  el.innerHTML=`${imgHTML}<h3>${p.title}</h3><div class="muted">${p.desc}</div><div class="price">₹${p.price}</div><div style="margin-top:10px"><button class="btn" data-add="${p.id}">Add to Cart</button></div>`;
+  productList.appendChild(el);
+});
+
+const openCartBtn = document.getElementById('open-cart');
+const cartDrawer = document.getElementById('cart-drawer');
+const closeCartBtn = document.getElementById('close-cart');
+const cartItemsEl = document.getElementById('cart-items');
+const cartEmpty = document.getElementById('cart-empty');
+const cartSummary = document.getElementById('cart-summary');
+const cartCountEl = document.getElementById('cart-count');
+const cartSubtotalEl = document.getElementById('cart-subtotal');
+const cartTotalEl = document.getElementById('cart-total');
+const checkoutBtn = document.getElementById('checkout-btn');
+const clearCartBtn = document.getElementById('clear-cart');
+
+function updateCartUI(){
+  const cart=loadCart();
+  cartItemsEl.innerHTML='';
+  if(cart.length===0){cartEmpty.style.display='block';cartSummary.style.display='none';cartCountEl.textContent='0'; return;}
+  cartEmpty.style.display='none';cartSummary.style.display='block';
+  cartCountEl.textContent=cart.reduce((s,i)=>s+i.qty,0);
+  let subtotal=0;
+  cart.forEach(item=>{
+    const p=PRODUCTS.find(x=>x.id===item.id);
+    subtotal+=p.price*item.qty;
+    const row=document.createElement('div'); row.className='cart-item';
+    row.innerHTML=`<div style="flex:1;font-weight:600">${p.title}</div><div class="small">₹${p.price} × ${item.qty} = ₹${p.price*item.qty}</div>`;
+    cartItemsEl.appendChild(row);
+  });
+  cartSubtotalEl.textContent=`₹${subtotal}`;
+  cartTotalEl.textContent=`₹${subtotal+50}`; // add service fee ₹50
+}
+
+document.body.addEventListener('click',(e)=>{
+  const addId=e.target.getAttribute('data-add'); if(addId){addToCart(addId); return;}
+  const remId=e.target.getAttribute('data-remove'); if(remId){removeFromCart(remId); return;}
+});
+
+document.body.addEventListener('change',(e)=>{
+  const qtyId=e.target.getAttribute('data-qty'); if(qtyId){ const v=parseInt(e.target.value)||1; updateQty(qtyId,v);}
+});
+
+openCartBtn.addEventListener('click',()=>{cartDrawer.classList.add('open');});
+closeCartBtn.addEventListener('click',()=>{cartDrawer.classList.remove('open');});
+clearCartBtn.addEventListener('click',()=>{if(confirm('Clear cart?')){clearCart();}});
+checkoutBtn.addEventListener('click',()=>{
+  const cart=loadCart();
+  if(cart.length===0){alert('Cart is empty'); return;}
+  localStorage.setItem('cc_checkout_cart', JSON.stringify(cart));
+  window.location.href='checkout.html';
+});
+
+updateCartUI();
+</script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cube Coders — Checkout</title>
+<style>
+body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;background:#061827;color:#e6eef8;line-height:1.5}
+.wrap{max-width:900px;margin:28px auto;padding:20px}
+h1{font-size:24px;color:#0b84ff;margin-bottom:12px}
+.cart-item{background:#0f1724;padding:14px;border-radius:10px;margin-bottom:12px;display:flex;gap:12px;align-items:flex-start;}
+.cart-item img{width:120px;height:80px;object-fit:cover;border-radius:8px;}
+.cart-details{flex:1}
+.price{font-weight:700;margin-top:6px}
+.btn{display:inline-block;padding:8px 12px;border-radius:10px;background:#0b84ff;color:white;text-decoration:none;font-weight:600;border:none;cursor:pointer;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>🛒 Checkout</h1>
+<div id="cart-items"></div>
+
+<div style="margin-top:12px;font-weight:700">
+  Subtotal: ₹<span id="cart-subtotal">0</span><br>
+  Service Fee: ₹<span id="service-fee">50</span><br>
+  Total: ₹<span id="cart-total">0</span>
+</div>
+
+<button class="btn" id="submit-email">Order via Email</button>
+</div>
+
+<script>
+const SERVICE_FEE = 50;
+
+const PRODUCTS = [
+  {id:'basic-1', title:'Normal Setup', price:100, desc:'Basic server setup (optimizations + starter plugins).', img:null},
+  {id:'itemeditor-1', title:'Item Editor Setup', price:200, desc:'Item editor config & modal version available.', img:null},
+  {id:'bundle-1', title:'All Paid Plugins Bundle', price:1000, desc:'Bundle of premium plugins.', img:'packmmc.jpg', bundleList:[
+    '🛡️ CoreProtect – Rollback / Anti-Grief',
+    '🛒 ShopGUI+ – GUI Shops',
+    '✨ AdvancedEnchantments – Custom Enchants',
+    '🗺️ Residence – Land Claiming',
+    '🧱 GriefDefender – Protection / Claims',
+    '💳 Tebex (Buycraft) – Server Store',
+    '🎁 AquaticCrates – Fancy Crates',
+    '🔐 Residence Addons – Extra Features',
+    '📦 CrateReloaded Pro – Crates System',
+    '🧩 Custom GUI Plugins – Menus / Shops',
+    '...and many more premium plugins!'
+  ]},
+  {id:'megadeath', title:'MineDeath Lifesteal Setup', price:200, desc:'Optimized Lifesteal setup — PvP ready, economy & GUI.', img:null}
+];
+
+// load cart from localStorage
+function loadCart(){ try{ return JSON.parse(localStorage.getItem('cc_checkout_cart')||'[]') }catch(e){return []} }
+
+function updateCartUI(){
+  const cart = loadCart();
+  const container = document.getElementById('cart-items');
+  container.innerHTML='';
+  let subtotal=0;
+
+  cart.forEach(item=>{
+    const p = PRODUCTS.find(x=>x.id===item.id);
+    subtotal+=p.price*item.qty;
+    const el = document.createElement('div'); el.className='cart-item';
+    let imgHTML = p.img ? `<img src="${p.img}" alt="${p.title}">` : '';
+    let descHTML = `<div>${p.desc}</div>`;
+    if(p.bundleList) descHTML += '<ul style="margin:6px 0 0 18px;">' + p.bundleList.map(x=>`<li>${x}</li>`).join('') + '</ul>';
+    el.innerHTML = `${imgHTML}<div class="cart-details"><div style="font-weight:600">${p.title}</div>${descHTML}<div class="price">₹${p.price} × ${item.qty} = ₹${p.price*item.qty}</div></div>`;
+    container.appendChild(el);
+  });
+
+  document.getElementById('cart-subtotal').textContent = subtotal;
+  const total = subtotal + SERVICE_FEE;
+  document.getElementById('cart-total').textContent = total;
+}
+
+// submit via Gmail
+document.getElementById('submit-email').addEventListener('click',()=>{
+  const cart = loadCart();
+  if(cart.length===0){ alert('Cart is empty!'); return; }
+
+  let bodyLines = [];
+  let subtotal=0;
+  cart.forEach(item=>{
+    const p = PRODUCTS.find(x=>x.id===item.id);
+    subtotal+=p.price*item.qty;
+    bodyLines.push(`${p.title} x ${item.qty} = ₹${p.price*item.qty}`);
+    if(p.bundleList) bodyLines.push('Bundle Includes:\n'+p.bundleList.join('\n'));
+  });
+
+  bodyLines.push(`\nSubtotal: ₹${subtotal}`);
+  bodyLines.push(`Service Fee: ₹${SERVICE_FEE}`);
+  bodyLines.push(`Total: ₹${subtotal+SERVICE_FEE}`);
+
+  const subject = encodeURIComponent('Cube Coders Server Order');
+  const body = encodeURIComponent(bodyLines.join('\n'));
+  const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=buissness.cubecoders@gmail.com&su=${subject}&body=${body}`;
+  window.open(gmailLink,'_blank');
+});
+
+updateCartUI();
+</script>
+</body>
+</html>
